@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace SalesWebMvc.Models.Entities
 {
-    public class Departament
+    public class Department
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
     }
 }
