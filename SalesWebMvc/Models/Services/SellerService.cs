@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Models.Entities;
+using SalesWebMvc.Models.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,28 +17,48 @@ namespace SalesWebMvc.Models.Services
             _context = context;
         }
 
-        public List<Seller> FindAll()
+        public async Task<List<Seller>> FindAllAsync()
         {
-            return _context.Seller.ToList();
+            return await _context.Seller.ToListAsync();
         }
 
-        public void Insert(Seller seller)
+        public async Task InsertAsync(Seller seller)
         {
             _context.Add(seller);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public Seller FindById(int sellerId)
+        public async Task<Seller> FindByIdAsync(int sellerId)
         {
-            return _context.Seller.Include(x => x.Department)
-                                       .FirstOrDefault(x => x.Id == sellerId);
+            return await _context.Seller.Include(x => x.Department)
+                                       .FirstOrDefaultAsync(x => x.Id == sellerId);
         }
 
-        public void Remove(int sellerId)
+        public async Task RemoveAsync(int sellerId)
         {
-            var sellerExclude = FindById(sellerId);
+            var sellerExclude = await FindByIdAsync(sellerId);
             _context.Seller.Remove(sellerExclude);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Seller seller)
+        {
+            bool hasAny = await _context.Seller.AnyAsync(x => x.Id == seller.Id);
+            if (!hasAny)
+            {
+                throw new NotFoundException("Seller not found.");
+            }
+
+            try
+            {
+                _context.Update(seller);
+                await _context.SaveChangesAsync();
+
+            }
+            catch (DbUpdateConcurrencyException e)
+            { 
+                throw new DbConcurrencyException(e.Message);
+            }
         }
 
 
