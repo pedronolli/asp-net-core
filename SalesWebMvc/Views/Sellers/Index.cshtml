@@ -1,0 +1,69 @@
+﻿@model IEnumerable<SalesWebMvc.Models.Entities.Seller>
+
+
+@{
+    ViewData["Title"] = "Sellers";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-light">Create New</a>
+</p>
+
+<table class="table table-striped table-hover">
+    <thead class="table-info active">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+        
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+        
+            <th>
+                @Html.DisplayNameFor(model => model.BirthDate)
+            </th>
+     
+            <th>
+                @Html.DisplayNameFor(model => model.BaseSalary)
+            </th>
+            
+            <th colspan="3"></th>
+            
+        </tr>
+    </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+
+
+                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+
+
+                <td>@Html.DisplayFor(modelItem => item.BirthDate)</td>
+
+
+                <td>@Html.DisplayFor(modelItem => item.BaseSalary)</td>
+
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning">Edit</a>
+                </td>
+
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info">Details</a>
+                </td>
+
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">Delete</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+</table>
+
+
